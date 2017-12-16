@@ -36,17 +36,14 @@ void setupContext(framebuffer_t * frames, zbuffer_t & z){
 	
 	// Setup the framebuffer.
 	frames[0].mask    = 0;
-	frames[0].psm     = GS_PSM_32;
+	frames[0].psm     = GS_PSM_16;
 	frames[0].address = graph_vram_allocate(frames[0].width, frames[0].height, frames[0].psm, GRAPH_ALIGN_PAGE);
 	
-	frames[1].mask    = 0;
-	frames[1].psm     = GS_PSM_32;
-	frames[1].address = graph_vram_allocate(frames[1].width, frames[1].height, frames[1].psm, GRAPH_ALIGN_PAGE);
 	// Setup the zbuffer.
 	z.enable = DRAW_ENABLE;
 	z.mask = 0;
 	z.method = ZTEST_METHOD_GREATER_EQUAL;
-	z.zsm = GS_ZBUF_32;
+	z.zsm = GS_ZBUF_32; // Note to self: 16-bit Z-buffer later
 	z.address = graph_vram_allocate(frames[0].width,frames[0].height,z.zsm, GRAPH_ALIGN_PAGE);
 	
 	// Set video mode.
@@ -77,18 +74,16 @@ void setupContext(framebuffer_t * frames, zbuffer_t & z){
 int main(){
 	
 	SifInitRpc(0);
-	// Init pad immediatly.
+	// Init pad immediately.
 	Pad pad;
 	if(!pad.setup()){
 		printf("Error setting up the pad.\n");
 	}
 	
 	zbuffer_t z;
-	framebuffer_t  framebuffers[2];
-	framebuffers[0].width = 640;
-	framebuffers[0].height = 512;
-	framebuffers[1].width = 640;
-	framebuffers[1].height = 512;
+	framebuffer_t  framebuffers[1];
+	framebuffers[0].width = 720;
+	framebuffers[0].height = 1080;
 	
 	
 	setupContext(framebuffers, z);
@@ -97,17 +92,14 @@ int main(){
 	Scene scene(framebuffers[0].width, framebuffers[0].height, &z);
 	
 	// The data packets for double buffering dma sends.
-	packet_t *generalPackets[2];
+	packet_t *generalPackets[0];
 	packet_t *generalCurrent;
-	packet_t *texturePackets[2];
+	packet_t *texturePackets[0];
 	packet_t *textureCurrent;
-	packet_t *flipBuffersPacket;
+//	packet_t *flipBuffersPacket;
 	
 	generalPackets[0] = packet_init(65535,PACKET_NORMAL);
-	generalPackets[1] = packet_init(65535,PACKET_NORMAL);
 	texturePackets[0] = packet_init(128,PACKET_NORMAL);
-	texturePackets[1] = packet_init(128,PACKET_NORMAL);
-	flipBuffersPacket = packet_init(8, PACKET_UCAB);
 	int context = 0;
 	
 	for(;;){
@@ -130,15 +122,15 @@ int main(){
 		graph_set_framebuffer_filtered(framebuffers[context].address, framebuffers[context].width, framebuffers[context].psm, 0, 0);
 		
 		//Switch context.
-		context ^= 1;
+		//context ^= 1;
 		
 		// Flip framebuffer.
-		qword_t * q = flipBuffersPacket->data;
+		//qword_t * q = flipBuffersPacket->data;
 		q++;
 		q = draw_framebuffer(q, 0, &(framebuffers[context]));
 		q = draw_finish(q);
-		dma_wait_fast();
-		dma_channel_send_normal_ucab(DMA_CHANNEL_GIF, flipBuffersPacket->data, q - flipBuffersPacket->data, 0);
+		//dma_wait_fast();
+		//dma_channel_send_normal_ucab(DMA_CHANNEL_GIF, flipBuffersPacket->data, q - flipBuffersPacket->data, 0);
 		draw_wait_finish();
 	}
 
