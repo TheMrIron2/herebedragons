@@ -47,7 +47,7 @@ Object::Object(bool interpolateTexture){
 	prim.mapping = DRAW_ENABLE;
 	prim.fogging = DRAW_DISABLE;
 	prim.blending = DRAW_DISABLE;
-	prim.antialiasing = DRAW_ENABLE;
+	prim.antialiasing = DRAW_DISABLE;
 	prim.mapping_type = PRIM_MAP_ST;
 	prim.colorfix = PRIM_UNFIXED;
  
@@ -86,7 +86,7 @@ void Object::render(packet_t * packet, packet_t * texturePacket, MATRIX world_vi
 	// Load the texture into vram.
 	qword_t * qt = texturePacket->data;
 	
-	qt = draw_texture_transfer(qt, _texture, 256, 256, GS_PSM_24, _texbuf->address, _texbuf->width);
+	qt = draw_texture_transfer(qt, _texture, 256, 256, GS_PSM_16, _texbuf->address, _texbuf->width);
 	
 	qt = draw_texture_flush(qt);
 	dma_channel_send_chain(DMA_CHANNEL_GIF, texturePacket->data, qt - texturePacket->data, 0,0);
