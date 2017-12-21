@@ -45,7 +45,7 @@ Object::Object(bool interpolateTexture){
 	prim.type = PRIM_TRIANGLE;
 	prim.shading = PRIM_SHADE_GOURAUD;
 	prim.mapping = DRAW_ENABLE;
-	prim.fogging = DRAW_DISABLE;
+	prim.fogging = DRAW_ENABLE;
 	prim.blending = DRAW_DISABLE;
 	prim.antialiasing = DRAW_DISABLE;
 	prim.mapping_type = PRIM_MAP_ST;
