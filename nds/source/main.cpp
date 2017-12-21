@@ -90,7 +90,7 @@ int main(void) {
 	glInit();
 	
 	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_ANTIALIAS);
+	//glEnable(GL_ANTIALIAS);
 	glEnable(GL_BLEND);
 	glClearColor(0,15,15,31);
 	glClearPolyID(63);
