@@ -17,8 +17,6 @@
 #include "transform.h"
 #include "Skybox.hpp"
 
-
-
 Skybox::Skybox(){
 	
 	// Define the triangle primitive we want to use.
@@ -26,7 +24,7 @@ Skybox::Skybox(){
 	prim.shading = PRIM_SHADE_GOURAUD;
 	prim.mapping = DRAW_ENABLE;
 	prim.fogging = DRAW_DISABLE;
-	prim.blending = DRAW_DISABLE;
+	prim.blending = DRAW_ENABLE;
 	prim.antialiasing = DRAW_DISABLE;
 	prim.mapping_type = PRIM_MAP_ST;
 	prim.colorfix = PRIM_UNFIXED;
@@ -128,6 +126,8 @@ void Skybox::render(packet_t * packet, packet_t * texturePacket, MATRIX world_vi
 		// Clipping.
 		// As soon as one vertex is clipped, we discard the triangle.
 		// We rely on the relative high-density of the meshes to avoid having huge faces disappearing all of a sudden.
+		// Note - this should ideally be scrapped for a more efficient method rather than relying on the GS to
+		// process geometry in the form of a "safety zone" to discard triangles - or offload to VU1?
 		if(temp_vertices[p0][2] < -1.0 || temp_vertices[p0][2] > 0 || fabs(temp_vertices[p0][0]) > 1.0 || fabs(temp_vertices[p0][1]) > 1.0){
 			continue;
 		}
