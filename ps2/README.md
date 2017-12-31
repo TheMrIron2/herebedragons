@@ -2,11 +2,11 @@
 
 ![](images/ps2-1.png)
 
-This version was implemented using the [ps2dev SDK](https://github.com/ps2dev/ps2sdk), and tested in PCSX2 under Ubuntu. The camera can be moved with the 4-directional pad to rotate and the cross and triangle buttons to get closer/farther from the scene. The demo use a single-buffered setup at 1440x540 at 1080i output, at up to 60 FPS depending on what is on screen. This uses a big chunk of the 4MB VRAM, but still leaving enough room for some 256x256 textures and a 512x512 skybox texture, in which we swap the texture for the current model at each frame. Bilinear filtering is used but tends to blur the textures.
+This version was implemented using the [ps2dev SDK](https://github.com/ps2dev/ps2sdk), and tested in PCSX2 under Ubuntu. The camera can be moved with the 4-directional pad to rotate and the cross and triangle buttons to get closer/farther from the scene. The demo use a single-buffered setup at 960x540 at 1080i output, at up to 60 FPS depending on what is on screen. This uses a portion of the 4MB VRAM, but still leaves enough room for some 256x256 textures and a 384x384 skybox texture, in which we swap the texture for the current model at each frame. Bilinear filtering is used but tends to blur the textures.
 
 ![](images/ps2-2.png)
 
-The structure of the PS2 is peculiar, with specialized sub-processors. From a graphics pipeline point of view, the PS2 only provide a rasterizer. Model transformations, shading, projection on the screen, clipping and culling, conversion to pixel units, have to be done by the programmer on the main CPU (EE) or the vector processing units (VU0 & VU1) with inline assembly. The SDK provides a series of helpers, but I overloaded some to fit my needs. Currently, VU0/VU1 are not used at all in this demo.
+The structure of the PS2 is unorthodox, with specialized sub-processors. From a graphics pipeline point of view, the PS2 only provides a rasterizer. Model transformations, shading, projection on the screen, clipping and culling and conversion to pixel units has to be done by the programmer on the main CPU (EE) or the vector processing units (VU0 & VU1) with inline assembly. The SDK provides a series of helpers, but I overloaded some to fit my needs. Currently, VU0/VU1 are not used at all in this demo.
 
 ![](images/ps2-3.png)
 
