@@ -43,7 +43,7 @@ void setupContext(framebuffer_t * frames, zbuffer_t & z){
 	z.enable = DRAW_ENABLE;
 	z.mask = 0;
 	z.method = ZTEST_METHOD_GREATER_EQUAL;
-	z.zsm = GS_ZBUF_32; // Note to self: 16-bit Z-buffer later
+	z.zsm = GS_ZBUF_16;
 	z.address = graph_vram_allocate(frames[0].width,frames[0].height,z.zsm, GRAPH_ALIGN_PAGE);
 	
 	// Set video mode.
@@ -80,7 +80,7 @@ int main(){
 		printf("Error setting up the pad.\n");
 	}
 	
-	zbuffer_t z;
+	zbuffr_t z;
 	framebuffer_t  framebuffers[1];
 	framebuffers[0].width = 960;
 	framebuffers[0].height = 540;
@@ -91,12 +91,12 @@ int main(){
 	// Init scene avec graphic setup.
 	Scene scene(framebuffers[0].width, framebuffers[0].height, &z);
 	
-	// The data packets for double buffering dma sends.
+	// Sending DMA packets
 	packet_t *generalPackets[0];
 	packet_t *generalCurrent;
 	packet_t *texturePackets[0];
 	packet_t *textureCurrent;
-//	packet_t *flipBuffersPacket;
+//	packet_t *flipBuffersPacket; commented out because this flips two buffers; we now only have one
 	
 	generalPackets[0] = packet_init(65535,PACKET_NORMAL);
 	texturePackets[0] = packet_init(128,PACKET_NORMAL);
