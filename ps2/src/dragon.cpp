@@ -80,10 +80,10 @@ int main(){
 		printf("Error setting up the pad.\n");
 	}
 	
-	zbuffr_t z;
+	zbuffer_t z;
 	framebuffer_t  framebuffers[1];
 	framebuffers[0].width = 960;
-	framebuffers[0].height = 540;
+	framebuffers[0].height = 512;
 	
 	
 	setupContext(framebuffers, z);
