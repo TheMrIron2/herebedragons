@@ -55,8 +55,8 @@ Scene::Scene(int width, int height, zbuffer_t * z) : _plane(true), _monkey(false
 void Scene::allocateVRAM(){
 	// Allocate some vram for the texture buffer
 	_texbuf.width = 256;
-	_texbuf.psm = GS_PSM_24;
-	_texbuf.address = graph_vram_allocate(256,256,GS_PSM_24,GRAPH_ALIGN_BLOCK);
+	_texbuf.psm = GS_PSM_16;
+	_texbuf.address = graph_vram_allocate(256,256,GS_PSM_16,GRAPH_ALIGN_BLOCK);
 	
 	// Sampling will be setup for each object, at render time.
 	_texbuf.info.width = draw_log2(256);
